@@ -16,9 +16,12 @@ my $filename;
 
 sub start_header { $filename = '' }
 sub header
-{   my $obj   = shift;
-    my $header = shift;
+{   my $obj     = shift;
+
+    my $header  = MIME::Xparser::join_header_lines(@_);
+
     my $name;
+
 
     if ( ($name) = $header =~ m/^content-disposition:.*filename=(.*)/is )
     {   $name = MIME::Xparser::parse_value($name);

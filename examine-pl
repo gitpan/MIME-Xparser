@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-#use MIME::Xparser;
-use Xparser;
+use MIME::Xparser ;
 
 package handler;
 use vars qw(@ISA);
@@ -15,8 +14,9 @@ sub header
     my @args  = @_;
 
     $obj->SUPER::header(@_);
-    
-    my $header = shift @args;
+
+
+    my $header  = MIME::Xparser::join_header_lines(@args);
     my $name;
 
     if ( ($name) = $header =~ m/^content-disposition:.*filename=(.*)/is )

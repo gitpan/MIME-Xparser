@@ -49,10 +49,10 @@ package handler;
 
 sub new { my %obj; bless \%obj , 'handler' }
 
-sub header   { my $obj = shift; $obj->{''} .= "@_" }
-sub neck     { my $obj = shift; $obj->{''} .= "@_" }
-sub boundary { my $obj = shift; $obj->{''} .= "@_" }
-sub body     { my $obj = shift; $obj->{''} .= "@_" }
+sub header   { my $obj = shift; $obj->{''} .= join '' , @_ }
+sub neck     { my $obj = shift; $obj->{''} .= join '' , @_ }
+sub boundary { my $obj = shift; $obj->{''} .= join '' , @_ }
+sub body     { my $obj = shift; $obj->{''} .= join '' , @_ }
 
 use vars qw($AUTOLOAD );
 sub AUTOLOAD 

@@ -52,7 +52,7 @@ package MIME::Xparser;
 #-----------------------------
 use vars qw($VERSION);
 
-$VERSION = '0.31';
+$VERSION = '0.4';
 
 use Carp;
 
@@ -90,7 +90,7 @@ sub start_document
                     is_message  => 1,
                   };    
 
-    $obj->{ header    } = ''       ;   # saved until complete
+    $obj->{ header    } = []       ;   # saved until complete
     $obj->{ msgs      } = [$msg]   ;   # state of each msg
     $obj->{ any_parts } = 0        ;   # earlier boundaries?
     $obj->{ msg       } = $msg     ;   # current msg
@@ -284,9 +284,15 @@ sub end_of_part_found
     return 0; # end not found
 }
 
+sub join_header_lines
+{          # same line as below
+           return join '' , map {m/^\s?(.*?)[\r\n]*$/} @_;
+}
+
 sub header
 {   my $obj     = shift;
-    my $header  = $obj->{header};
+
+    my $header  = join '' , map {m/^\s?(.*?)[\r\n]*$/} @{$obj->{header}};
 
 #     MIME-Version: 1.0     
 #     MIME-Version: 1.0 (produced by MetaSend Vx.x)
@@ -323,10 +329,10 @@ sub MIME::Xparser::Header::line
 
     if ($line =~ /^\r?$/)
     {   
-        if ($obj->{header})
+        if (@{$obj->{header}})
         {   header($obj);
-            $obj->{handler}->header($obj->{header});
-            $obj->{header}='';
+            $obj->{handler}->header(@{$obj->{header}});
+            $obj->{header}=[];
         }
 
         $obj->{handler}->end_headers();
@@ -375,22 +381,22 @@ sub MIME::Xparser::Header::line
 
     elsif (/^\s/)
     {
-        $obj->{header} .= $line;
+        push @{$obj->{header}} , $line;
     }
 
     else
     {   
-        if ($obj->{header})
+        if (@{$obj->{header}})
         {   header($obj);
-            $obj->{handler}->header($obj->{header});
-            $obj->{header} = '';
+            $obj->{handler}->header(@{$obj->{header}});
+            $obj->{header} = [];
         }
 
         if ( $line =~ m/^--/ and $obj->{any_parts} )
         {   return if end_of_part_found($obj,$line);
         }
 
-        $obj->{header} = $line;
+        $obj->{header} = [$line];
     }
 }
 
@@ -542,6 +548,15 @@ first thing in the string.
   # and extract that value
   $the_value = MIME::Xparser::parse_value($contains_the_value);
 
+=item MIME::Xparser::join_header_lines C<@ARRAY>
+
+Returns a string which is the header lines joined together using an
+algorithm that  will  work  for  typical data.  I.e.  a single white space
+is removed from the beginning of each line, and any number of trailing
+\r's or \n's are trimmed from each line, and the resulting lines are
+joined into a single string.
+
+
 
 =back
 
@@ -600,25 +615,25 @@ received then the original data will be identically reproduced.
 
 =over 4
 
-=item header one_headers_lines_of_input
+=item header C<@the_lines_making_up_one_header>
 
-The parameter input to the handler is a single string which is the
-concatenation of the lines that make up a single header.  
+The parameter input to the handler is an array of strings which are the
+lines that make up a single header.  
 
 The word header, here, means a single header item, not the entire block of
 header lines at the top of a mime entity.
 
-=item neck   null_line
+=item neck   C<$null_line>
 
 The parameter input to the handler is a single string which is the
 null line that seperated the headers from the body.
 
-=item body one_line_from_the_body
+=item body C<$one_line_from_the_body>
 
 The parameter input to the handler is a single string which is a
 line of data from the body.
 
-=item boundary a_boundary_line
+=item boundary C<$a_boundary_line>
 
 The parameter input to the handler is a single string which is a
 boundary line found between parts.
@@ -673,7 +688,7 @@ appropriate, but that is not shown.
 
 =head1 VERSION
 
-version 0.31
+version 0.4
 
 =head1 EXAMPLE
 
@@ -748,15 +763,6 @@ systems reading data that may have either \n new lines or \CR\LF
 (which is the standard for "raw" mail data) but may or may not be
 appropriate for other systems.  Therefore this may or may not be a
 bug for anyone.
-
-Continuation header lines are joined to the initial header line without
-removing the line endings.  This is not a bug itself, since the parser
-intends to pass the data unaltered, but it conflicts with the intended
-behaviour of the parser when handling lines that have no explicit line
-ending characters.  In that case this might cause problems.  The handler
-should provide a method to join the header lines together, but that seems
-like over kill, so this has simply been left as a potential issue for some
-unusual parsing situations.
 
 Others - probably?
        

@@ -53,7 +53,7 @@ DESCRIPTION
        sequence of calls to the structure handlers.
        
 VERSION
-       Currently version 0.31
+       Currently version 0.4
 
 BUGS       
        MIME-Version is found but not used.
@@ -63,8 +63,9 @@ BUGS
        skip them if it wishes.)
 
        Virtually no assistance is provided for the parsing requirements
-       that a handler might have.  Again, this is not a bug, though it
-       might be considered less than ideal.
+       that a handler might have (other than the original categorization
+       of the lines of data of course).  Again, this is not a bug, though
+       it might be considered less than ideal.
 
        The null-line denoting the end of the headers allows for \r in the
        line.  Specifically we test for ^\r?$.  This works well on unix
