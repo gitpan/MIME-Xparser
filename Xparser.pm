@@ -52,7 +52,7 @@ package MIME::Xparser;
 #-----------------------------
 use vars qw($VERSION);
 
-$VERSION = '0.3';
+$VERSION = '0.31';
 
 use Carp;
 
@@ -185,7 +185,7 @@ sub leave
 #   tspecials = ()<>@,;:\"/[]?=
 # this is the character class to match a token
 
-my $TOKEN = '['. quotemeta( q[!#$%&'*+-.^_`{|}~] ) . '0-9A-Za-z ^_`{|}~]+' ;
+my $TOKEN = '['. quotemeta( q[!#$%&'*+-.^_`{|}~] ) . '0-9A-Za-z]+' ;
 my $COMMENT='\\([^\\)]*\\)';
 
 sub parse_value #( string with value as first thing in it)
@@ -673,7 +673,7 @@ appropriate, but that is not shown.
 
 =head1 VERSION
 
-version 0.3
+version 0.31
 
 =head1 EXAMPLE
 

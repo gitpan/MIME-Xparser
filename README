@@ -53,7 +53,7 @@ DESCRIPTION
        sequence of calls to the structure handlers.
        
 VERSION
-       Currently version 0.3
+       Currently version 0.31
 
 BUGS       
        MIME-Version is found but not used.
