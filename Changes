@@ -1,0 +1,16 @@
+Revision history for Perl extension MIME::Xparser
+
+0.0    5-May-2004 
+	- original version; created by copying another module
+
+0.1    6-May-2004
+	- fix nesting error and target of m// error
+        - add example attachment extractor
+
+0.2     7-May-2004
+	- change null line from ^$ to ^\r?$ to allow \r\n line endings
+        - add another example message struture display script
+
+0.3     12-May-2004
+        - change names of example so they don't get installed
+        - add test cases

@@ -1,0 +1,98 @@
+start_document 
+  start_message 
+    start_headers 
+x-env-from: From dmclaughlin@bmts.com Tue Apr 27 19:32:30 2004
+Return-Path: <dmclaughlin@bmts.com>
+Received: from cathy.bmts.com (cathy.bmts.com [216.183.128.202])
+	by vtn1.victoria.tc.ca (8.12.10/8.12.10) with ESMTP id i3S2WTHs000945
+	for <yf110@vtn1.victoria.tc.ca>; Tue, 27 Apr 2004 19:32:30 -0700 (PDT)
+Received: from koxu (cvx-os-ppp0571.bmts.com [216.183.143.63])
+	by cathy.bmts.com (8.12.10/8.12.10) with SMTP id i3S2N0qT000888;
+	Tue, 27 Apr 2004 22:23:14 -0400 (EDT)
+Date: Tue, 27 Apr 2004 22:23:00 -0400 (EDT)
+Message-Id: <200404280223.i3S2N0qT000888@cathy.bmts.com>
+FROM: "postmaster" <vmailservice@bigfoot.com>
+TO: "Internet Client" <receiver@homeserver.com>
+Subject: {Virus?} Message
+Mime-Version: 1.0
+Content-type: multipart/mixed; boundary="nlbugxzpshlgmev"
+X-bmts-MailScanner: Found to be infected
+X-bmts-MailScanner-SpamCheck: 
+X-MailScanner-From: dmclaughlin@bmts.com
+X-Scanned-By: MIMEDefang 2.39
+Content-Length: 1668
+Status: R
+X-Status: 
+X-Keywords:                  
+    end_headers 
+
+    start_parts 
+      start_preamble 
+      end_preamble 
+--nlbugxzpshlgmev
+      start_part 
+        start_headers 
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
+        end_headers 
+
+        start_body 
+<HTML><p><b><font size=3D"+1" color=3D"red">Warning: </FONT>This message ha=
+s had one
+or more attachments removed (gsfw.exe). Please read the "bmts-Attachment-Wa=
+rning.txt"
+attachment(s) for more information.</b><br /></p>
+
+<HEAD></HEAD>
+<BODY>
+<iframe src=3D"cid:kcnrxmgrjt" height=3D0 width=3D0></iframe>
+<BR>This is the qmail program<BR>
+<BR><BR><BR>Undelivered message to <B>pnsqrzk@bigfoot.com</B>
+</BODY></HTML>
+
+        end_body 
+      end_part 
+--nlbugxzpshlgmev
+      start_part 
+        start_headers 
+Content-Type: text/plain;
+ charset="us-ascii";
+ name="bmts-Attachment-Warning.txt"
+Content-Disposition: attachment; filename="bmts-Attachment-Warning.txt"
+Content-Transfer-Encoding: quoted-printable
+        end_headers 
+
+        start_body 
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "gsfw.exe"
+was believed to be infected by a virus and has been replaced by this warning
+message.
+
+If you wish to receive a copy of the *infected* attachment, please
+e-mail helpdesk and include the whole of this message
+in your request. Alternatively, you can call them, with
+the contents of this message to hand when you call.
+
+At Tue Apr 27 22:24:40 2004 the virus scanner said:
+   ClamAV Module: gsfw.exe was infected: Worm.Gibe.F
+   MailScanner: Executable DOS/Windows programs are dangerous in email (gsf=
+w.exe)
+   No programs allowed (gsfw.exe)
+
+Note to Help Desk: Look on the bmts MailScanner in /var/spool/MailScanner/q=
+uarantine/20040427 (message i3S2N0qT000888).
+--=20
+Postmaster
+MailScanner thanks transtec Computers for their support
+
+        end_body 
+      end_part 
+--nlbugxzpshlgmev--
+      start_postamble 
+
+
+      end_postamble 
+    end_parts 
+  end_message 
+end_document 

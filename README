@@ -1,0 +1,86 @@
+Here's a brief summary of the documentation which comes with this
+module. See the module itself for further details.
+
+NAME
+       MIME::Xparser - A mime parser that is somewhat reminiscent of the 
+       way SAX parses XML (i.e. it invokes callbacks as things are found).
+
+SYNOPSIS
+
+         use Your_Content_Handler;
+         use MIME::Xparser;
+
+         my $handler = new Your_Content_Handler;
+         my $parser  = new MIME::Xparser;
+
+         $parser->set_content_handler($handler);
+
+         $parser->start_document();
+         while (<YOUR_FILE>)
+         {
+             $parser->line($_);
+         }
+         $parser->end_document();
+
+
+AUTHOR
+       Malcolm Dew-Jones <yf110@victoria.tc.ca>
+
+INSTALLATION
+       perl Makefile.PL
+       make
+       make test
+       make install
+
+       This is (at least for now) a pure perl module, so if you prefer,
+       simply copy the .pm file into a MIME sub directory of your perl
+       @INC path.
+
+DESCRIPTION
+       Your handler will implement methods which will be called at the
+       appropriate moment by the parser.
+       
+       Your handler can use AUTOLOAD instead of methods it doesn't need.
+
+       Some methods in your handler will have names like start_headers and
+       end_headers.  These are used to communicate the struture of the
+       message to your handler.
+
+       Four of your methods are used to supply the categorized data to
+       your handler.  These are header, neck, body, and boundary.  These
+       calls pass the original data unaltered to your handler.  The data
+       is explicitly categorized by the method name, and implicitly by the
+       sequence of calls to the structure handlers.
+       
+VERSION
+       Currently version 0.3
+
+BUGS       
+       MIME-Version is found but not used.
+       
+       Embedded message/rfc822 parts are parsed whether you want them to
+       be or not.  (That's not really a bug, and your handler is free to
+       skip them if it wishes.)
+
+       Virtually no assistance is provided for the parsing requirements
+       that a handler might have.  Again, this is not a bug, though it
+       might be considered less than ideal.
+
+       The null-line denoting the end of the headers allows for \r in the
+       line.  Specifically we test for ^\r?$.  This works well on unix
+       systems reading data that may have either \n new lines or \CR\LF
+       (which is the standard for "raw" mail data) but may or may not be
+       appropriate for other systems.  Therefore this may or may not be a
+       bug for anyone.
+
+       Others - probably?
+       
+EXAMPLES
+       The distribution includes  extract-pl  which extracts attachments
+       from a mail box file, and  examine-pl  which shows the structure of
+       a message and a few keys other bits of data.  These illustrate some
+       uses of the module.
+
+       The Xparser.pm module includes two trivial handlers at the top of
+       the code.  These are both potentially useful and are examples of
+       simple handlers.

@@ -1,0 +1,13 @@
+x-env-from: From MAILER-DAEMON Sun Apr  4 11:21:47 2004
+Date: 04 Apr 2004 11:21:47 -0700
+From: Mail System Internal Data <MAILER-DAEMON@victoria.tc.ca>
+Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
+Message-ID: <1081102907@victoria.tc.ca>
+X-IMAP: 1076274175 0000000016
+Status: RO
+
+This text is part of the internal format of your mail folder, and is not
+a real message.  It is created automatically by the mail system software.
+If deleted, important folder data will be lost, and it will be re-created
+with the data reset to initial values.
+

@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+use MIME::QuotedPrint;
+use MIME::Base64;
+use MIME::Xparser;
+
+package handler;
+
+sub new { bless \ my $obj , shift }
+sub AUTOLOAD {}
+sub null_decoder {@_}
+*my_decoder = \&null_decoder;
+
+{ # scope
+my $filename;
+
+sub start_header { $filename = '' }
+sub header
+{   my $obj   = shift;
+    my $header = shift;
+    my $name;
+
+    if ( ($name) = $header =~ m/^content-disposition:.*filename=(.*)/is )
+    {   $name = MIME::Xparser::parse_value($name);
+        ($name) = $name =~ m/([^\\\/]*)$/;
+        print "NAME: $name\n";
+        ($filename = $name) =~ s/[^\w\-\.]/-/g;
+        print "FILE: $filename\n";
+    }
+
+    elsif ( ($name) = $header =~ m/^content-transfer-encoding: (.*)/is )
+    {   
+        $name = MIME::Xparser::parse_value($name);
+        print "ENCODING: $name\n";
+        if    ($name eq 'base64')          { *my_decoder = \&decode_base64; }
+        elsif ($name eq 'quoted-prinable') { *my_decoder = \&decode_qp; }
+        else                               { *my_decoder = \&null_decoder; }
+
+    }
+
+}
+
+sub start_body   
+{   my $obj   = shift;
+
+    if ($filename)
+    {
+        if (-e $filename)
+        {
+            print "$filename exists\n";        
+            my ($ext) = $filename =~ m/(\.[^\.]*)$/;
+            (my $name = $filename) =~ s/\.[^\.]*$//;
+            my $i;
+            for ($i=0; -e "$name-$i$ext"; $i++)
+            {   
+                die "-x up to $name-$i$ext, giving up\n" if $i > 50;
+            }
+            $filename = "$name-$i$ext";
+        }
+
+        print "open: $filename\n";
+        open FILE , ">$filename" or die "can't open $filename: $!\n";
+    }
+}
+
+sub body 
+{   my $obj = shift;
+    if ($filename)
+    {   my $line = my_decoder( $_[0] );
+        print FILE $_[0];
+    }
+}
+
+sub end_body { close FILE if $filename; $filename=''; }
+
+} # end scope
+
+
+
+package main;
+
+
+my $parser  = new MIME::Xparser(new handler);
+
+print "extract.pl : reading from <>\n";
+
+FOR:
+for (;;)
+{
+    while (<>)
+    {
+        if (m/^From /)
+        {
+            $parser->end_document() if $parser->in_document();
+            print "\n$_";
+            $parser->start_document();
+            next FOR;
+        }
+        $parser->line($_);
+    }
+    $parser->end_document() if $parser->in_document();
+    last;
+}
+

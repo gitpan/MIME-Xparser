@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+#use MIME::Xparser;
+use Xparser;
+
+package handler;
+use vars qw(@ISA);
+@ISA=qw( MIME::Xparser::Handler::Structure ) ;
+
+sub new { bless \ my $obj , shift }
+
+sub header
+{   
+    my $obj   = shift;
+    my @args  = @_;
+
+    $obj->SUPER::header(@_);
+    
+    my $header = shift @args;
+    my $name;
+
+    if ( ($name) = $header =~ m/^content-disposition:.*filename=(.*)/is )
+    {   $name = MIME::Xparser::parse_value($name);
+        ($name) = $name =~ m/([^\\\/]*)$/;
+        print "FILENAME: $name\n";
+    }
+
+
+    elsif ( ($name) = $header =~ m/^Content-Type:.*name=(.*)/is )
+    {   $name = MIME::Xparser::parse_value($name);
+        ($name) = $name =~ m/([^\\\/]*)$/;
+        print "NAME: $name\n";
+    }
+
+
+    elsif ( ($name) = $header =~ m/^content-transfer-encoding: (.*)/is )
+    {   
+        $name = MIME::Xparser::parse_value($name);
+        print "ENCODING: $name\n";
+
+    }
+
+
+}
+
+
+
+package main;
+
+
+my $parser  = new MIME::Xparser(new handler);
+
+print "$0: reading one message from <@ARGV>\n";
+
+while (<>)
+{
+    if ( ! $parser->in_document() )
+    {   
+        print "\n$ARGV\n\n";
+        $parser->start_document();
+    }
+
+    $parser->line($_);
+
+    if (eof)
+    {   
+        $parser->end_document() if $parser->in_document();
+    }
+
+}
+$parser->end_document() if $parser->in_document();
+
